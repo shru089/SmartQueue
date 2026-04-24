@@ -1,0 +1,300 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&family=Noto+Serif:wght@400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Variables ─────────────────────────────────────────────────────── */
+:root {
+  --primary:    #70D95D;
+  --primary-dk: #4CAA3C;
+  --secondary:  #54836C;
+  --secondary-dk: #2E5A47;
+  --tertiary:   #CB9254;
+  --neutral:    #FFEEAD;
+  --neutral-50: #FFFAEB;
+  --surface:    #FFF9E8;
+  --text:       #1C2B22;
+  --text-mid:   #54836C;
+  --text-muted: #8A9E92;
+  --card-bg:    #FFFFFF;
+  --border:     rgba(84,131,108,0.15);
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans;
+    background: var(--surface);
+    color: var(--text);
+    font-feature-settings: "cv11","ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  * { box-sizing: border-box; }
+}
+
+@layer components {
+  /* ── App Shell ──────────────────────────────────────────────────────────── */
+  .app-shell {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--surface);
+  }
+
+  /* ── Cards ──────────────────────────────────────────────────────────────── */
+  .card {
+    background: var(--card-bg);
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 2px 12px rgba(84,131,108,0.08);
+    border: 1px solid var(--border);
+  }
+
+  .card-neutral {
+    background: var(--neutral);
+    border-radius: 1rem;
+    padding: 1rem;
+    border: 1px solid rgba(203,146,84,0.15);
+  }
+
+  .card-hover {
+    @apply card;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  .card-hover:hover {
+    box-shadow: 0 4px 20px rgba(84,131,108,0.18);
+    transform: translateY(-1px);
+  }
+
+  /* ── Priority Badges ────────────────────────────────────────────────────── */
+  .badge-critical {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold;
+    background: #FDECEA; color: #D32F2F;
+    border: 1px solid rgba(211,47,47,0.2);
+  }
+  .badge-urgent {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold;
+    background: #FFF3E0; color: #F57C00;
+    border: 1px solid rgba(245,124,0,0.2);
+  }
+  .badge-priority {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold;
+    background: #FFF9C4; color: #F9A825;
+    border: 1px solid rgba(249,168,37,0.25);
+  }
+  .badge-regular {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold;
+    background: #E8F5E9; color: #388E3C;
+    border: 1px solid rgba(56,142,60,0.2);
+  }
+  /* Status badge variants */
+  .badge-arriving {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold;
+    background: var(--primary); color: var(--secondary-dk);
+    border: 1px solid var(--primary-dk);
+  }
+  .badge-in-queue {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold;
+    background: var(--neutral); color: var(--secondary);
+    border: 1px solid rgba(84,131,108,0.25);
+  }
+
+  /* ── Buttons ────────────────────────────────────────────────────────────── */
+  .btn-primary {
+    @apply w-full py-3.5 px-6 rounded-2xl font-semibold text-sm transition-all duration-200;
+    background: var(--secondary);
+    color: #FFFFFF;
+  }
+  .btn-primary:hover {
+    background: var(--secondary-dk);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(84,131,108,0.35);
+  }
+  .btn-primary:active  { transform: translateY(0); }
+  .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+  .btn-green {
+    @apply w-full py-3.5 px-6 rounded-2xl font-bold text-sm transition-all duration-200;
+    background: var(--primary);
+    color: var(--secondary-dk);
+  }
+  .btn-green:hover {
+    background: var(--primary-dk);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(112,217,93,0.4);
+    transform: translateY(-1px);
+  }
+  .btn-green:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  .btn-danger {
+    @apply w-full py-3 px-6 rounded-2xl font-semibold text-sm transition-all duration-200;
+    background: #FDECEA; color: #D32F2F;
+    border: 1px solid rgba(211,47,47,0.3);
+  }
+  .btn-danger:hover { background: #D32F2F; color: white; }
+
+  .btn-ghost {
+    @apply py-2 px-4 rounded-xl font-medium text-sm transition-all duration-200;
+    color: var(--secondary);
+    border: 1.5px solid var(--secondary);
+    background: transparent;
+  }
+  .btn-ghost:hover { background: var(--neutral); }
+
+  .btn-outlined {
+    @apply py-2 px-4 rounded-xl font-medium text-sm transition-all duration-200;
+    color: var(--text); border: 1.5px solid var(--border);
+    background: transparent;
+  }
+  .btn-outlined:hover { background: var(--neutral-50); }
+
+  /* ── Emergency Alert ────────────────────────────────────────────────────── */
+  .emergency-banner {
+    @apply w-full p-4 rounded-2xl flex items-start gap-3 animate-slide-down;
+    background: linear-gradient(135deg, #D32F2F, #B71C1C);
+    box-shadow: 0 4px 24px rgba(211,47,47,0.35);
+  }
+
+  /* ── Token Hero Number ──────────────────────────────────────────────────── */
+  .token-number {
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--secondary);
+    font-family: 'Public Sans', sans-serif;
+  }
+
+  /* ── Bottom Nav ─────────────────────────────────────────────────────────── */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 480px;
+    background: var(--card-bg);
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 0.5rem 0;
+    z-index: 50;
+    box-shadow: 0 -2px 16px rgba(84,131,108,0.08);
+  }
+
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 2px; padding: 6px 16px; border-radius: 12px;
+    cursor: pointer; transition: all 0.2s ease;
+    color: var(--text-muted); font-size: 0.65rem; font-weight: 500;
+    position: relative;
+  }
+  .nav-item.active { color: var(--secondary); }
+
+  /* ── Inputs ─────────────────────────────────────────────────────────────── */
+  .input-field {
+    @apply w-full px-4 py-3.5 rounded-xl text-sm font-medium outline-none transition-all duration-200;
+    background: var(--neutral-50);
+    border: 1.5px solid var(--border);
+    color: var(--text);
+  }
+  .input-field:focus {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 3px rgba(84,131,108,0.12);
+    background: white;
+  }
+  .input-label {
+    display: block; font-size: 0.7rem; font-weight: 700;
+    margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+
+  /* ── Page Header ────────────────────────────────────────────────────────── */
+  .page-header {
+    position: sticky; top: 0; z-index: 40;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 1px 8px rgba(84,131,108,0.06);
+  }
+
+  /* ── Typography ─────────────────────────────────────────────────────────── */
+  .section-title {
+    font-size: 1.05rem; font-weight: 800;
+    color: var(--secondary); font-family: 'Public Sans', sans-serif;
+  }
+  .label-serif {
+    font-family: 'Noto Serif', serif;
+    font-size: 0.8rem; font-weight: 600; color: var(--text-muted);
+  }
+
+  /* ── Live dot ───────────────────────────────────────────────────────────── */
+  .live-dot {
+    display: inline-block; width: 8px; height: 8px;
+    border-radius: 50%; background: var(--primary);
+    animation: pulse 2.5s cubic-bezier(0.4,0,0.6,1) infinite;
+  }
+
+  /* ── Progress bar ───────────────────────────────────────────────────────── */
+  .progress-bar { height: 6px; border-radius: 999px; overflow: hidden; background: var(--neutral); }
+  .progress-fill {
+    height: 100%; border-radius: 999px; transition: width 1s ease;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+  }
+
+  /* ── Stat cards ─────────────────────────────────────────────────────────── */
+  .stat-card { @apply card flex flex-col gap-1; }
+  .stat-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); }
+  .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--secondary); }
+
+  /* ── Toast ──────────────────────────────────────────────────────────────── */
+  .toast {
+    position: fixed; top: 1rem; left: 50%; transform: translateX(-50%);
+    z-index: 50; padding: 12px 16px; border-radius: 1rem;
+    font-size: 0.85rem; font-weight: 600;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    max-width: 320px; width: calc(100% - 2rem);
+    animation: slideDown 0.3s ease-out;
+  }
+
+  /* ── Admin action buttons ───────────────────────────────────────────────── */
+  .admin-btn-next {
+    @apply px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150;
+    background: var(--secondary); color: white;
+  }
+  .admin-btn-next:hover { background: var(--secondary-dk); }
+
+  .admin-btn-skip {
+    @apply px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150;
+    background: #FFF3E0; color: #F57C00;
+    border: 1px solid rgba(245,124,0,0.3);
+  }
+  .admin-btn-escalate {
+    @apply px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150;
+    background: var(--neutral); color: var(--secondary);
+    border: 1px solid rgba(84,131,108,0.25);
+  }
+  .admin-btn-escalate:hover { background: var(--neutral-50); }
+
+  /* ── Scrollbar ──────────────────────────────────────────────────────────── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(84,131,108,0.25); border-radius: 2px; }
+}
+
+@layer utilities {
+  .text-primary   { color: var(--primary); }
+  .text-secondary { color: var(--secondary); }
+  .text-tertiary  { color: var(--tertiary); }
+  .bg-primary     { background: var(--primary); }
+  .bg-secondary   { background: var(--secondary); }
+  .bg-neutral     { background: var(--neutral); }
+  .bg-surface     { background: var(--surface); }
+  .safe-pb        { padding-bottom: env(safe-area-inset-bottom, 16px); }
+}
