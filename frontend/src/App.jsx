@@ -5,6 +5,7 @@ import TokenPage from './pages/TokenPage';
 import AdminLoginPage from './pages/AdminLoginPage';
 import AdminDashboard from './pages/AdminDashboard';
 import AnalyticsPage from './pages/AnalyticsPage';
+import DisplayPage from './pages/DisplayPage';
 
 export default function App() {
   return (
@@ -20,6 +21,9 @@ export default function App() {
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/analytics" element={<AnalyticsPage />} />
+
+          {/* Public TV Display */}
+          <Route path="/display" element={<DisplayPage />} />
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />

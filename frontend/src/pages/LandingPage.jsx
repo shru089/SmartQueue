@@ -238,20 +238,40 @@ export default function LandingPage() {
           )}
         </div>
 
-        {/* Features */}
-        <div className="mt-5 grid grid-cols-2 gap-3">
-          {[
-            { icon: '⚡', title: 'Real-time Updates', desc: 'Live position & wait time' },
-            { icon: '🔔', title: 'Smart Alerts', desc: 'Get notified when near' },
-            { icon: '🏥', title: 'Priority Queue', desc: 'Emergency first system' },
-            { icon: '📱', title: 'No App Needed', desc: 'Works in your browser' },
-          ].map((f) => (
-            <div key={f.title} className="card">
-              <span className="text-2xl">{f.icon}</span>
-              <p className="text-xs font-bold text-secondary mt-2">{f.title}</p>
-              <p className="text-xs text-gray-400 mt-0.5">{f.desc}</p>
+        {/* How It Works */}
+        <div className="mt-6 mb-2">
+          <h3 className="text-sm font-bold text-secondary mb-3 px-1">How it works</h3>
+          <div className="flex flex-col gap-3">
+            <div className="card flex items-start gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-neutral flex items-center justify-center flex-shrink-0">
+                <span className="text-lg font-bold text-secondary">1</span>
+              </div>
+              <div>
+                <p className="text-sm font-bold text-secondary">Get Your Token</p>
+                <p className="text-xs text-gray-500 mt-1">Enter your phone number above. No need to stand in a physical line at the counter.</p>
+              </div>
             </div>
-          ))}
+            
+            <div className="card flex items-start gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-neutral flex items-center justify-center flex-shrink-0">
+                <span className="text-lg font-bold text-secondary">2</span>
+              </div>
+              <div>
+                <p className="text-sm font-bold text-secondary">Wait Anywhere</p>
+                <p className="text-xs text-gray-500 mt-1">Track your live position and estimated wait time directly on your phone.</p>
+              </div>
+            </div>
+
+            <div className="card flex items-start gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-neutral flex items-center justify-center flex-shrink-0">
+                <span className="text-lg font-bold text-secondary">3</span>
+              </div>
+              <div>
+                <p className="text-sm font-bold text-secondary">Arrive When Called</p>
+                <p className="text-xs text-gray-500 mt-1">We'll notify your phone when it's your turn. Just walk up to the counter!</p>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     </div>

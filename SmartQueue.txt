@@ -1,0 +1,162 @@
+
+
+SmartQueue
+Smart Queue & Crowd Optimization System
+
+PRODUCT REQUIREMENTS DOCUMENT
++
+IMPLEMENTATION SPECIFICATION
+
+
+
+
+
+
+CONFIDENTIAL — FOR ACADEMIC SUBMISSION ONLY
+
+SECTION 0 — DOCUMENT OVERVIEW
+0.1 Purpose of This Document
+This document serves as the combined Product Requirements Document (PRD) and Implementation Specification for the Smart Queue and Crowd Optimization System (SmartQueue). It is structured to address two distinct audiences:
+Stakeholders / Evaluators: Section 0–2 cover the product vision, platform decision, and requirements in business-readable language.
+Developers / Implementers: Sections 3–9 cover architecture, data models, API specification, algorithms, and sprint plans in technical detail.
+0.2 What Was Wrong With the Original Idea — Loopholes Fixed
+The original concept had several engineering gaps that this specification addresses:
+0.3 Document Scope
+In Scope: Single-branch, single-queue deployment with multi-counter support; priority queuing; PWA delivery; Hybrid SDLC.
+Out of Scope: Multi-branch management, payment integration, native mobile app, hardware kiosks.
+SECTION 1 — PLATFORM & TECHNOLOGY DECISIONS
+1.1 Platform Decision: PWA vs Native App
+The platform decision was evaluated on six criteria. The outcome is a definitive choice of Progressive Web Application for this project version, with native app as a v2.0 future scope item.
+
+Website or App? PWA is the right call for SmartQueue at this stage because one codebase supports Android, iOS, and desktop without Play Store approval friction. That makes it the best fit for an academic project and MVP rollout.
+Chapter 1.4 decision summary: PWA delivers faster development, simpler deployment, and broad device reach, while native app should be considered at v2.0 once the product reaches production scale and needs deeper offline support, store distribution, or hardware integrations.
+1.2 SDLC Decision: Hybrid Agile-Waterfall
+Neither pure Waterfall nor pure Agile alone fits this project's dual need for academic documentation rigor and flexible implementation iteration.
+1.3 Technology Stack
+SECTION 2 — PRODUCT REQUIREMENTS
+2.1 User Stories
+2.2 Functional Requirements
+2.2.1 Token & User Requirements
+2.2.2 Admin Requirements
+2.3 Non-Functional Requirements
+SECTION 3 — SYSTEM ARCHITECTURE
+3.1 Architecture Overview
+SmartQueue follows a three-tier architecture with two real-time communication channels:
+
+3.2 Three-Tier Breakdown
+3.3 WebSocket Channel Design
+Two distinct WebSocket channels serve different purposes:
+SECTION 4 — DATA MODELS
+4.1 Entity Relationship Summary
+One Queue has many Tokens. One Token has one ServiceSession upon completion. One Queue has one or more Admins. Each priority change on a Token generates one PriorityAuditLog entry.
+4.2 Queue
+
+4.3 Token
+
+4.4 ServiceSession
+
+4.5 PriorityAuditLog
+
+4.6 Admin
+
+SECTION 5 — API SPECIFICATION
+5.1 User APIs
+5.2 Admin APIs
+5.3 WebSocket Events
+SECTION 6 — PRIORITY QUEUING SPECIFICATION
+6.1 Priority Tier Definitions
+
+Key design principle: Within the same priority tier, ordering is always strictly FIFO (by issued_at). This prevents gaming — a user cannot gain advantage over others at the same priority level by any mechanism other than arriving earlier.
+6.2 Priority Assignment Flow
+6.2.1 User Self-Declaration (at Token Generation)
+User selects from dropdown: Emergency / Senior Citizen / Pregnant / Disability / None. System assigns corresponding priority tier. This enables the most common use cases (elderly, pregnant) to be handled automatically without admin intervention.
+6.2.2 Admin Override (at any time)
+Admin can escalate or de-escalate any token via the admin dashboard. A reason field is mandatory. Every change creates a PriorityAuditLog record. This is the primary mechanism for P0 Critical assignments, which should be verified by clinical staff rather than self-declared.
+6.3 Priority Queue Ordering Algorithm
+Database Query (Core Ordering Logic)
+
+Effective Position Calculation (for EWT)
+
+6.4 P0 Emergency Interrupt Handling
+When a P0 token is generated, the following sequence occurs:
+Token created with priority=0; position set to 1 in sorted order.
+Backend broadcasts p0_emergency_alert event on the admin WebSocket channel immediately.
+Admin dashboard displays full-width red banner: '🔴 EMERGENCY TOKEN RECEIVED — [Token#] | Reason: [reason]' with a one-click 'Call Emergency Now' button.
+All connected users' EWT is recalculated and broadcast via position_recalculated event.
+Admin decides whether to interrupt current in-progress service or wait for natural completion.
+Alert persists until admin explicitly acknowledges it (dismiss button) or the token is called.
+
+Note: The software cannot force-stop an in-progress human service interaction. The system provides maximum visibility and one-click action; the final call remains with the service provider. This is intentional.
+6.5 No-Show Handling (Interaction with Priority)
+
+SECTION 7 — WAIT TIME ALGORITHM
+7.1 Full Algorithm
+
+7.2 Initialization Behaviour
+At queue creation, avg_service_time_seconds defaults to 300 (5 minutes per person). This is used until at least one ServiceSession is recorded. After 5 sessions, the rolling average begins to converge. After 20 sessions, the window is fully established. The default value can be overridden by the admin at queue creation.
+7.3 EWT Recalculation Triggers
+SECTION 8 — FRONTEND SPECIFICATION
+8.1 Design Direction
+SmartQueue follows a mobile-first PWA design system optimized for 360px-wide screens before scaling up to tablet and desktop admin layouts.
+Visual tone: clean, clinical, and trustworthy rather than decorative.
+Primary color: hospital blue #1A3C6E, paired with white backgrounds and soft blue-gray card surfaces.
+Layout system: stacked cards, generous spacing, high-contrast typography, and large touch targets for fast queue interactions.
+Priority colors: Critical = red, Urgent = orange, Priority = yellow, Regular = green across both user and admin views.
+8.2 User Flow Pages
+Page 1 — Landing / Token Generation
+Phone number input (validated: 10 digits, Indian format)
+Priority reason dropdown: None (default) / Emergency / Senior Citizen (65+) / Pregnant / Disability
+Submit → OTP verification (4-digit code for MVP; Twilio SMS for prod)
+On success → redirect to Token Page with token_id in URL
+Page 2 — Token Tracking Page
+Large token number badge centered inside the hero card (e.g. A007), designed as the primary visual anchor.
+Live position counter: '3rd in queue' shown prominently under the token badge and updated in real time via WebSocket.
+Estimated wait: '~12 minutes' displayed as a dedicated stat card and recalculated on every queue event.
+Currently serving: 'Now serving: A004'
+Priority tier badge shown on the same card using color-coded labels: red = Critical, orange = Urgent, yellow = Priority, green = Regular.
+Visual style: white background, blue primary accents (#1A3C6E), rounded cards, minimal clinical UI chrome.
+Notification permission prompt on first load
+Auto-update without refresh; reconnects WS on drop
+Page 3 — PWA / Service Worker
+Manifest: app name, icons, theme color #1A3C6E, display: standalone
+Service worker: caches HTML/CSS/JS for offline shell; token page works offline (shows last state)
+Web Push subscription requested at token generation; push sent when 2 positions remain
+8.3 Admin Flow Pages
+Page 4 — Admin Login
+Username + password form; JWT stored in httpOnly cookie
+Page 5 — Admin Dashboard
+P0 Emergency Alert Panel (top): prominent full-width red banner appears immediately when a Critical token arrives; includes 'Call Emergency Now' CTA and dismiss button.
+Queue control bar: Next / Pause / Close buttons; current counter display
+Waiting tokens list: card or table rows showing token number, phone (masked), priority badge, issued time, and EWT.
+Per-token action cluster includes Next, Skip, and Escalate buttons so the dashboard matches operational workflow directly.
+Escalate modal: priority tier dropdown (P0–P3) + mandatory reason text field + confirm
+Currently serving panel: token number, time elapsed, 'Mark Done' button
+Desktop enhancement: waiting queue can expand into a denser table, while mobile keeps the same information in stacked cards.
+Page 6 — Analytics Dashboard
+Tokens served today (count) + avg service time (minutes)
+Hourly chart: tokens served per hour (Recharts BarChart)
+Priority distribution pie: P0/P1/P2/P3 breakdown for the day
+P0 frequency chart: P0 arrivals by hour (useful for staffing)
+Priority audit log table: token, change, reason, admin, timestamp
+8.4 Key React Components
+SECTION 9 — HYBRID SDLC & SPRINT PLAN
+9.1 Waterfall Phase Milestones
+9.2 Agile Sprint Backlog
+Sprint 1 — Backend Core (Week 3)
+Sprint 2 — Frontend + Priority UI (Week 4)
+Sprint 3 — Analytics, Polish & Deploy (Week 5)
+9.3 Definition of Done (Each Sprint)
+All P0 sprint tasks completed and acceptance criteria verified
+No open P0/P1 bugs remaining
+Code pushed to GitHub; PR reviewed
+Waterfall documentation updated with any design changes discovered during sprint
+Sprint retrospective note added to project README
+SECTION 10 — FOLDER STRUCTURE
+
+SECTION 11 — DEPLOYMENT
+11.1 Deployment Targets
+11.2 Local Development Setup
+
+11.3 Environment Variables
+SECTION 12 — FUTURE ROADMAP
+DOCUMENT CHANGELOG
