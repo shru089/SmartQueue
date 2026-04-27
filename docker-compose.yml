@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: smartqueue-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: smartqueue_user
+      POSTGRES_PASSWORD: smartqueue_pass
+      POSTGRES_DB: smartqueue_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U smartqueue_user -d smartqueue_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: smartqueue-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://smartqueue_user:smartqueue_pass@db:5432/smartqueue_db
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app  # Hot-reload during development
+
+volumes:
+  pgdata:

@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Python
+backend/venv/
+backend/__pycache__/
+backend/routers/__pycache__/
+*.pyc
+
+# Environment & secrets
+.env
+backend/.env
+
+# Database files (SQLite legacy)
+*.db
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
