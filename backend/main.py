@@ -18,9 +18,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# app.include_router(queue.router)
-# app.include_router(admin.router)
+app.include_router(queue.router)
+app.include_router(admin.router)
 
 @app.get("/")
 def read_root():
-    return {"message": "SmartQueue API is running. Not connected to frontend yet."}
+    return {"message": "SmartQueue API is Live and ready for the frontend!"}
