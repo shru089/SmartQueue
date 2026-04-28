@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ChevronRight, Play, Pause, X, ArrowUpCircle,
-  Users, Clock, CheckCircle2, AlertTriangle, LogOut, BarChart2
+  ChevronRight, Play, Pause, X,
+  Users, Clock, CheckCircle2, LogOut, BarChart2
 } from 'lucide-react';
 import { useQueue } from '../context/QueueContext';
-import { PRIORITY_META, QUEUE_STATUS, TOKEN_STATUS } from '../data/mockData';
+import { PRIORITY_META, QUEUE_STATUS } from '../data/mockData';
 import EmergencyAlert from '../components/EmergencyAlert';
 import PriorityBadge from '../components/PriorityBadge';
 import PriorityModal from '../components/PriorityModal';
@@ -76,7 +76,7 @@ function TokenRow({ token, onSkip, onEscalate, onCallNext }) {
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const {
-    queue, waitingTokens, p0Alert,
+    queue, waitingTokens,
     callNext, skipToken, escalateToken,
     toggleQueueStatus, closeQueue
   } = useQueue();
@@ -115,7 +115,6 @@ export default function AdminDashboard() {
   };
 
   const criticalCount = waitingTokens.filter(t => t.priority === 0).length;
-  const urgentCount = waitingTokens.filter(t => t.priority === 1).length;
 
   return (
     <div className="app-shell animate-fade-in">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { QrCode, Monitor, ChevronRight } from 'lucide-react';
+import { QrCode, Monitor } from 'lucide-react';
 import { useQueue } from '../context/QueueContext';
 
 export default function DisplayPage() {

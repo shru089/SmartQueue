@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, Ticket, BarChart2, ShieldCheck } from 'lucide-react';
+import { Home, Ticket, BarChart2 } from 'lucide-react';
 
 const USER_NAV = [
   { path: '/', icon: Home, label: 'Home' },

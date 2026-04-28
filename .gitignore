@@ -1,17 +1,24 @@
 # Dependencies
 node_modules/
+dist/
 
 # Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
 backend/venv/
 backend/__pycache__/
 backend/routers/__pycache__/
-*.pyc
 
 # Environment & secrets
 .env
 backend/.env
 
-# Database files (SQLite legacy)
+# Database files
+*.sqlite3
 *.db
 
 # OS files

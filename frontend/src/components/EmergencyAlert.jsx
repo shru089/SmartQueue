@@ -1,4 +1,4 @@
-import { AlertTriangle, Zap, X } from 'lucide-react';
+import { Zap, X } from 'lucide-react';
 import { useQueue } from '../context/QueueContext';
 
 export default function EmergencyAlert() {

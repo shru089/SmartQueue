@@ -7,6 +7,16 @@ import uuid
 
 router = APIRouter(prefix="/api/queue", tags=["Queue"])
 
+@router.get("/state")
+def get_queue_state(db: Session = Depends(get_db)):
+    queue_state = db.query(models.Queue).first()
+    if not queue_state:
+        queue_state = models.Queue(name="City Medical Center", currently_serving="--")
+        db.add(queue_state)
+        db.commit()
+        db.refresh(queue_state)
+    return queue_state
+
 def get_sorted_waiting_tokens(db: Session):
     """
     CORE ALGORITHM: Section 6.3 Priority Queue Ordering Algorithm

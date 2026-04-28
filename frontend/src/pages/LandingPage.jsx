@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Phone, ChevronDown, ChevronRight, AlertCircle, Clock, Users, Shield } from 'lucide-react';
+import { ChevronDown, ChevronRight, AlertCircle, Clock, Users, Shield } from 'lucide-react';
 import { useQueue } from '../context/QueueContext';
 import { PRIORITY_REASONS } from '../data/mockData';
 

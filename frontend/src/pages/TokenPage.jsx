@@ -22,7 +22,7 @@ export default function TokenPage() {
   const navigate = useNavigate();
   const { queue, myToken, clearMyToken, getEffectivePosition, waitingTokens } = useQueue();
   const [notifEnabled, setNotifEnabled] = useState(false);
-  const [tick, setTick] = useState(0);
+  const [, setTick] = useState(0);
 
   // Simulate live updates
   useEffect(() => {
